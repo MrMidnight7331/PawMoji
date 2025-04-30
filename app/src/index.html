@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PawMoji</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+<div id="header">
+    <h1 id="logo">🐾 PawMoji 🐾</h1>
+
+    <div id="controls">
+        <button id="reset-filter">Show All</button>
+
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-toggle" checked>
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div id="filter-buttons"></div>
+</div>
+
+<div id="kaomoji-container">
+    <div id="kaomoji-list"></div>
+</div>
+
+<div id="toast"></div>
+<script src="renderer.js"></script>
+</body>
+</html>
