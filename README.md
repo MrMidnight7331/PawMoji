@@ -64,7 +64,7 @@ Linux:
   - **Patch Release**  
   - Ensured consistent settings path and added escaping of all Discord markdown chars (`*`, `_`, `~`, `` ` ``)  #
   - Added a Window Resize button under Settings (resets to 400x800 pixels)
-  - Fixed application not closing issue
+  - Fixed application not closing issue 
 
 
 - **v0.0.7**  
