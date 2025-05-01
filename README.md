@@ -35,7 +35,7 @@ A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 
 1. **Clone & Install**  
    ```bash
-   git clone https://github.com/yourname/pawmoji.git
+   git clone https://github.com/MrMidnight7331/PawMoji.git
    cd pawmoji
    npm install
    ```
