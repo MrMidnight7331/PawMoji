@@ -1,5 +1,5 @@
 {
-  "name": "pawmoji",
+  "name": "PawMoji",
   "version": "0.0.8",
   "description": "A charming kaomoji clipboard for effortlessly adding kawaii faces to your text",
   "main": "src/main.js",
