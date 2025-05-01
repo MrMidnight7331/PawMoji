@@ -28,6 +28,8 @@ A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 
 #### 1. Download & Install:
 
+---
+
 Windows:
 
 **Download the installer and install PawMoji onto your system**
