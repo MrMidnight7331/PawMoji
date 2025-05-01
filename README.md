@@ -2,7 +2,7 @@
 
 A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 
-> Version 0.0.7 Beta
+> Version 0.0.7 Stable
 ---
 
 ## 🚀 Features
@@ -26,11 +26,16 @@ A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 
 ## 📦 Installation
 
-#### 1. Pre-Compiled Download:
+#### 1. Download & Install:
 
-1. **Download the pre-compled binary for your operating system and execute.**
+Windows: **Download the installer and install PawMoji onto your system**
 
+Linux: 
 
+1. **Download install.sh**
+2. **sudo bash install.sh**
+
+--- 
 #### 2. Developer Setup:
 
 1. **Clone & Install**  
@@ -124,9 +129,26 @@ Customize these in your local `styles.css` under `:root` (light) and `.dark-them
 
 ---
 
+
+## 🫰 Donation
+
+ETH: 0x939A9353e1a72e5d6Da07424c74815a6651a86f4
+
+MATIC: 0x939A9353e1a72e5d6Da07424c74815a6651a86f4
+
+SOLANA: HsNpPDGhDsmq4j1PBTDuMx67svj6446m8aUWGSpjGCjk
+
+BTC: bc1q55kfd0elssc9u3ha86gw4ea9w3l5cw7ch58hce
+
+Or buy me a coffee here:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S7NRQSG)
+
+---
+
 ## 📜 License
 [MIT](./LICENSE) © MrMidnight
 
 ---
 
-Enjoy adding kawaii flair to your text with PawMoji! 🐾✨
+**Enjoy adding kawaii flair to your text with PawMoji! 🐾✨**
