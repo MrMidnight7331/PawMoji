@@ -96,7 +96,7 @@ Linux:
 ---
 
 
-## Known Issues
+## 🛠️ Known Issues
 
 **Linux**
 
