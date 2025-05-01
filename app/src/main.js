@@ -3,6 +3,21 @@ const path = require('path');
 const fs = require('fs');
 const Database = require('./database');
 
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+    // Another instance is already running, quit this one
+    app.quit();
+} else {
+    app.on('second-instance', (_e, _argv, _workingDir) => {
+        if (mainWin) {
+            if (mainWin.isMinimized()) mainWin.restore();
+            mainWin.show();
+            mainWin.focus();
+        }
+    });
+}
+
+
 let userDir, dbPath, settingsPath, mainWin, editorWin, tray;
 
 async function chooseDataDir() {
