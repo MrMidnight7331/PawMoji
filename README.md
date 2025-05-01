@@ -33,7 +33,7 @@ Windows: **Download the installer and install PawMoji onto your system**
 Linux: 
 
 1. **Download install.sh**
-2. **sudo bash install.sh**
+2. `sudo bash install.sh`
 
 --- 
 #### 2. Developer Setup:
