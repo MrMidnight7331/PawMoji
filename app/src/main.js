@@ -15,6 +15,10 @@ if (!gotLock) {
     });
 }
 
+const iconName = process.platform === 'win32'
+    ? 'pawmoji-icon.ico'
+    : 'pawmoji-icon.png';
+const iconPath = path.join(__dirname, '..', 'assets', iconName);
 
 
 let userDir, dbPath, settingsPath, mainWin, editorWin, tray;
@@ -101,7 +105,15 @@ function createMenu() {
 async function createMain() {
     const { theme, hotkey } = loadSettings();
     // Window setup
-    mainWin = new BrowserWindow({ width: 350, height: 700, show: false, webPreferences: { nodeIntegration: true, contextIsolation: false } });
+    mainWin = new BrowserWindow({
+        width: 350, height: 700,
+        show: false,
+        icon: iconPath,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
     await mainWin.loadFile(path.join(__dirname, 'index.html'));
     mainWin.webContents.send('initial-theme', theme);
     mainWin.show();
@@ -112,10 +124,16 @@ async function createMain() {
     mainWin.on('close', e => { if (!app.isQuitting) { e.preventDefault(); mainWin.hide(); } });
 
     // Tray
-    const iconPath = path.join(__dirname, ''); // point to your 16×16 asset
-    if (fs.existsSync(iconPath)) {
-        const image = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
-        tray = new Tray(image);
+    const trayIconName = process.platform === 'win32'
+        ? 'pawmoji-icon.ico'
+        : 'pawmoji-icon.png';
+    const trayIconPath = path.join(__dirname, '..', 'assets', trayIconName);
+
+    if (fs.existsSync(trayIconPath)) {
+        const trayImage = nativeImage
+            .createFromPath(trayIconPath)
+            .resize({ width: 16, height: 16 });
+        tray = new Tray(trayImage);
         tray.setToolTip('PawMoji');
 
         // Left-click toggles minimize/restore

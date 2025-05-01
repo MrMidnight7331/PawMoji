@@ -1,6 +1,6 @@
 {
   "name": "pawmoji",
-  "version": "0.0.6 Beta",
+  "version": "0.0.7 Beta",
   "description": "A charming kaomoji clipboard for effortlessly adding kawaii faces to your text",
   "main": "src/main.js",
   "scripts": {
@@ -17,9 +17,10 @@
     "electron-builder": "^24.0.0"
   },
   "build": {
+    "icon": "assets/pawmoji-icon",
     "appId": "mrmidnight.pawmoji.project",
     "directories": { "output": "dist" },
-    "files": ["src/**/*"],
+    "files": ["src/**/*", "assets/**/*"],
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
