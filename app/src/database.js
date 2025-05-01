@@ -1,30 +1,72 @@
 const initSqlJs = require('sql.js');
 const fs = require('fs');
+const path = require('path');
 
 let db, SQL;
+
 module.exports = {
-    init: async (file) => {
-        SQL = await initSqlJs();
-        const data = fs.existsSync(file) ? fs.readFileSync(file) : new Uint8Array();
+    init: async (dbFile) => {
+        SQL = await initSqlJs({
+            locateFile: file => path.join(__dirname, '../node_modules/sql.js/dist/', file)
+        });
+        const fullPath = path.resolve(dbFile);
+        const data = fs.existsSync(fullPath) ? fs.readFileSync(fullPath) : new Uint8Array();
         db = new SQL.Database(data);
+        module.exports.ensureSchema();
     },
-    ensureSchema: () => db.run(`CREATE TABLE IF NOT EXISTS kaomoji (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT, tags TEXT)`),
+
+    ensureSchema: () => {
+        db.run(`
+      CREATE TABLE IF NOT EXISTS kaomoji (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        text TEXT NOT NULL,
+        tags TEXT DEFAULT ''
+      )
+    `);
+    },
+
     fetch: (tag) => {
-        const stmt = db.prepare(`SELECT id,text,tags FROM kaomoji`);
-        const all = [];
-        while (stmt.step()) all.push(stmt.getAsObject());
-        stmt.free();
-        return tag ? all.filter(r => r.tags.split(',').map(t => t.trim()).includes(tag)) : all;
+        const rows = db.exec(`SELECT id, text, tags FROM kaomoji`);
+        if (!rows.length) return [];
+        const all = rows[0].values.map(r => ({ id: r[0], text: r[1], tags: r[2] }));
+        return tag
+            ? all.filter(r => r.tags.split(',').map(t => t.trim()).includes(tag))
+            : all;
     },
+
     getTags: () => {
-        const stmt = db.prepare(`SELECT tags FROM kaomoji`);
+        const rows = db.exec(`SELECT tags FROM kaomoji`);
         const set = new Set();
-        while (stmt.step()) stmt.getAsObject().tags.split(',').forEach(t => set.add(t.trim()));
-        stmt.free();
-        return [...set].filter(t => t);
+        rows.forEach(({ values }) => {
+            values.forEach(([tags]) =>
+                tags.split(',').forEach(t => t.trim() && set.add(t.trim()))
+            );
+        });
+        return Array.from(set);
     },
-    add: (text, tags) => { db.run(`INSERT INTO kaomoji(text,tags) VALUES(?,?)`, [text, tags]); return db.exec(`SELECT last_insert_rowid() AS id`)[0].values[0][0]; },
-    update: (id, text, tags) => db.run(`UPDATE kaomoji SET text=?,tags=? WHERE id=?`, [text, tags, id]),
-    remove: (id) => db.run(`DELETE FROM kaomoji WHERE id=?`, [id]),
-    save: (file) => fs.writeFileSync(file, Buffer.from(db.export())),
+
+    add: (text, tags) => {
+        const stmt = db.prepare(`INSERT INTO kaomoji (text, tags) VALUES (?, ?)`);
+        stmt.run([text, tags]);
+        stmt.free();
+        const [[id]] = db.exec(`SELECT last_insert_rowid() AS id`)[0].values;
+        return id;
+    },
+
+    update: (id, text, tags) => {
+        const stmt = db.prepare(`UPDATE kaomoji SET text = ?, tags = ? WHERE id = ?`);
+        stmt.run([text, tags, id]);
+        stmt.free();
+    },
+
+    remove: (id) => {
+        const stmt = db.prepare(`DELETE FROM kaomoji WHERE id = ?`);
+        stmt.run([id]);
+        stmt.free();
+    },
+
+    save: (dbFile) => {
+        const fullPath = path.resolve(dbFile);
+        fs.writeFileSync(fullPath, Buffer.from(db.export()));
+    }
 };

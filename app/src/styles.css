@@ -435,3 +435,8 @@ body:not(.dark-theme) ::-webkit-scrollbar-thumb:hover {
 body.dark-theme ::-webkit-scrollbar-thumb:hover {
     background-color: var(--sapphire);
 }
+
+
+
+
+/* Discord Switch */

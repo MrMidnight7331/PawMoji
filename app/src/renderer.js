@@ -2,20 +2,20 @@
 const { ipcRenderer, clipboard } = require('electron');
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Theme toggle logic via settings.json ---
     const toggle = document.getElementById('theme-toggle');
-// apply theme sent from main
+
+    // Theme
     ipcRenderer.on('initial-theme', (_e, theme) => {
         document.body.classList.toggle('dark-theme', theme === 'dark');
         toggle.checked = (theme === 'dark');
     });
-// send changes back to main
     toggle.addEventListener('change', () => {
         const dark = toggle.checked;
         document.body.classList.toggle('dark-theme', dark);
         ipcRenderer.send('set-theme', dark ? 'dark' : 'light');
     });
-    // --- Filter & list logic ---
+
+    // Filters
     document.getElementById('filter-buttons')
         .addEventListener('click', e => {
             if (e.target.tagName === 'BUTTON') loadList(e.target.dataset.tag);
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadTags();
         loadList();
     });
+
     loadTags();
     loadList();
 });
@@ -44,18 +45,22 @@ async function loadTags() {
 
 async function loadList(filter = '') {
     const items = await ipcRenderer.invoke('get-kaomojis', filter);
+    const settings = await ipcRenderer.invoke('get-settings');
     const list = document.getElementById('kaomoji-list');
     list.innerHTML = '';
+
     items.forEach(k => {
         const div = document.createElement('div');
         div.classList.add('kaomoji-item');
         div.textContent = k.text;
         div.addEventListener('click', () => {
-            clipboard.writeText(k.text);
+            const out = settings.discordMode ? "\\" + k.text : k.text;
+            clipboard.writeText(out);
             showToast('Copied!');
         });
         list.appendChild(div);
     });
+
     adjustWindow();
 }
 
@@ -70,7 +75,6 @@ function adjustWindow() {
     const header = document.getElementById('header');
     const list   = document.getElementById('kaomoji-list');
     const neededHeight = header.offsetHeight + list.scrollHeight + 32;
-    // clamp width to 400px
     ipcRenderer.send('resize-window', {
         width: 400,
         height: Math.max(neededHeight, 200)
