@@ -82,13 +82,16 @@ async function createMain() {
     mainWin.on('close', e => { if (!app.isQuitting) { e.preventDefault(); mainWin.hide(); } });
 
     // Tray
-    const icon = path.join(__dirname, 'tray-icon.png');
-    if (fs.existsSync(icon)) {
-        tray = new Tray(nativeImage.createFromPath(icon));
+    const iconPath = path.join(__dirname, ''); // add a ~16×16 or 24×24 image here
+    if (fs.existsSync(iconPath)) {
+        tray = new Tray(nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 }));
         tray.setToolTip('PawMoji');
-        tray.on('click', () => mainWin.show());
+        tray.on('click', () => {
+            if (mainWin.isVisible()) mainWin.hide();
+            else mainWin.show();
+        });
         tray.setContextMenu(Menu.buildFromTemplate([
-            { label: 'Show', click: () => mainWin.show() },
+            { label: 'Show/Hide PawMoji', click: () => mainWin.isVisible() ? mainWin.hide() : mainWin.show() },
             { label: 'Quit', click: () => { app.isQuitting = true; app.quit(); } }
         ]));
     }
@@ -96,10 +99,13 @@ async function createMain() {
     // Hotkey
     try {
         globalShortcut.unregisterAll();
-        globalShortcut.register(hotkey, () => mainWin.isVisible() ? mainWin.hide() : mainWin.show());
+        globalShortcut.register(hotkey, () => {
+            if (!mainWin) return;
+            // Toggle visibility of the *same* window
+            mainWin.isVisible() ? mainWin.hide() : mainWin.show();
+        });
     } catch (err) {
-        dialog.showErrorBox('Hotkey Error', `Failed to register: ${hotkey}
-${err.message}`);
+        dialog.showErrorBox('Hotkey Error', `Failed to register: ${hotkey}\n${err.message}`);
     }
 
     // IPC
@@ -123,6 +129,7 @@ function openEditor() {
 app.whenReady().then(async () => {
     await initPaths();
     createMenu();
+    createMain();
 
     await Database.init(dbPath);
     Database.save(dbPath);
@@ -134,7 +141,6 @@ app.whenReady().then(async () => {
     ipcMain.handle('update-kaomoji',(_, d) => { Database.update(d.id, d.text, d.tags); Database.save(dbPath); return true; });
     ipcMain.handle('delete-kaomoji',(_, id) => { Database.remove(id); Database.save(dbPath); return true; });
 
-    createMain();
 });
 
 app.on('before-quit', () => app.isQuitting = true);
