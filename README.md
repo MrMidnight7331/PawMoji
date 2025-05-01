@@ -26,10 +26,6 @@ A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 
 ## 📦 Installation
 
-#### 1. Download & Install:
-
----
-
 Windows:
 
 **Download the installer and install PawMoji onto your system**
@@ -41,7 +37,8 @@ Linux:
 2. `sudo bash install.sh`
 
 --- 
-#### 2. Developer Setup:
+
+## 🧰 Developer Setup:
 
 1. **Clone & Install**  
    ```bash
