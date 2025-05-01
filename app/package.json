@@ -19,15 +19,21 @@
   "build": {
     "icon": "assets/pawmoji-icon",
     "appId": "mrmidnight.pawmoji.project",
-    "directories": { "output": "dist" },
-    "files": ["src/**/*", "assets/**/*"],
-
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*"
+    ],
     "linux": {
-      "target": ["AppImage"],
-
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "target": [
+        "AppImage"
+      ],
+      "nsis": {
+        "oneClick": false,
+        "allowToChangeInstallationDirectory": true
+      }
     }
   }
 }
