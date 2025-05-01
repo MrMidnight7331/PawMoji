@@ -83,5 +83,5 @@ function adjustWindow() {
 
 ipcRenderer.invoke('get-app-version').then(v => {
     const verEl = document.getElementById('app-version');
-    if (verEl) verEl.textContent = `v${v}`;
+    if (verEl) verEl.textContent = `v${v} Beta`;
 });
