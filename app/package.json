@@ -27,13 +27,12 @@
       "assets/**/*"
     ],
     "linux": {
-      "target": [
-        "AppImage"
-      ],
-      "nsis": {
-        "oneClick": false,
-        "allowToChangeInstallationDirectory": true
-      }
+      "target": ["AppImage"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   }
+
 }
