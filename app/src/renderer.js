@@ -44,9 +44,9 @@ async function loadTags() {
 }
 
 async function loadList(filter = '') {
-    const items = await ipcRenderer.invoke('get-kaomojis', filter);
+    const items    = await ipcRenderer.invoke('get-kaomojis', filter);
     const settings = await ipcRenderer.invoke('get-settings');
-    const list = document.getElementById('kaomoji-list');
+    const list     = document.getElementById('kaomoji-list');
     list.innerHTML = '';
 
     items.forEach(k => {
@@ -54,8 +54,12 @@ async function loadList(filter = '') {
         div.classList.add('kaomoji-item');
         div.textContent = k.text;
         div.addEventListener('click', () => {
-            const out = settings.discordMode ? "\\" + k.text : k.text;
-            clipboard.writeText(out);
+            let output = k.text;
+            if (settings.discordMode) {
+                // Escape Discord markdown chars *, _, ~, and `
+                output = output.replace(/([*_~`])/g, '\\$1');
+            }
+            clipboard.writeText(output);
             showToast('Copied!');
         });
         list.appendChild(div);
@@ -63,6 +67,7 @@ async function loadList(filter = '') {
 
     adjustWindow();
 }
+
 
 function showToast(msg) {
     const t = document.getElementById('toast');

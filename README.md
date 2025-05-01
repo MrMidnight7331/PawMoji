@@ -2,7 +2,7 @@
 
 A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 
-> Version 0.0.7 Stable
+> Version 0.0.8 Stable
 ---
 
 ## 🚀 Features
@@ -57,6 +57,25 @@ Linux:
    Generates installers in `dist/` for your platform.
 
 ---
+
+## 📔 **Changelog**
+
+- **v0.0.8**  
+  - **Patch Release**  
+  - Ensured consistent settings path and added escaping of all Discord markdown chars (`*`, `_`, `~`, `` ` ``)  
+
+
+- **v0.0.7**  
+  - **Initial Release**
+  - Added cross-platform packaging (NSIS installer for Windows, AppImage for Linux)  
+  - Implemented global hotkey (Ctrl+Shift+P) and system tray icon  
+  - Added Discord Escape mode to prefix backslashes for markdown-safe copying  
+  - Persisted theme and escape settings in `settings.json`  
+  - Enforced single-instance lock to prevent multiple windows  
+  - Default data folder set to `~/Documents/PawMoji`
+
+
+
 
 ## 🖥️ Usage
 
