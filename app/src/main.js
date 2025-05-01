@@ -131,7 +131,9 @@ async function createMain() {
     // Init DB after show
     Database.init(dbPath).then(() => Database.save(dbPath));
 
-    mainWin.on('close', e => { if (!app.isQuitting) { e.preventDefault(); mainWin.hide(); } });
+    mainWin.on('close', e => {
+
+    });
 
     // Tray
     const trayIconName = process.platform === 'win32'
