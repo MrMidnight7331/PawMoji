@@ -20,7 +20,7 @@ A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 - **Auto-Correct Tags**  
   When editing tags, small typos (≤ 1 edit) auto-correct to existing tags.  
 - **Responsive & Animated**  
-  Window resizes smoothly, and UI elements animate on hover and click.  
+  Window resizes smoothly, and UI elements animate on hover and click.
 
 ---
 
