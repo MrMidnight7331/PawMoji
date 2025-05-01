@@ -438,5 +438,8 @@ body.dark-theme ::-webkit-scrollbar-thumb:hover {
 
 
 
-
-/* Discord Switch */
+.app-version {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    user-select: none;
+}

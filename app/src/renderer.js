@@ -80,3 +80,8 @@ function adjustWindow() {
         height: Math.max(neededHeight, 200)
     });
 }
+
+ipcRenderer.invoke('get-app-version').then(v => {
+    const verEl = document.getElementById('app-version');
+    if (verEl) verEl.textContent = `v${v}`;
+});

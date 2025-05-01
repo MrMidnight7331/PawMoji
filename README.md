@@ -2,7 +2,7 @@
 
 A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 
-> Version 0.0.5 Beta
+> Version 0.0.6 Beta
 ---
 
 ## 🚀 Features
