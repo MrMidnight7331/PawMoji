@@ -29,16 +29,29 @@ async function chooseDataDir() {
 }
 
 async function initPaths() {
-    const defaultDir = path.join(app.getPath('documents'), 'PawMoji');
-    userDir = fs.existsSync(defaultDir) ? defaultDir : await chooseDataDir();
-    dbPath = path.join(userDir, 'kaomoji.db');
+    // Always use Documents/PawMoji
+    userDir      = path.join(app.getPath('documents'), 'PawMoji');
+    dbPath       = path.join(userDir, 'kaomoji.db');
     settingsPath = path.join(userDir, 'settings.json');
+
+    // Ensure folder exists
     fs.mkdirSync(userDir, { recursive: true });
+
+    // Create settings.json if missing
     if (!fs.existsSync(settingsPath)) {
-        fs.writeFileSync(settingsPath, JSON.stringify({ theme: 'dark', hotkey: 'Ctrl+Shift+P', discordMode: false }, null, 2));
+        fs.writeFileSync(settingsPath, JSON.stringify({
+            theme: 'dark',
+            hotkey: 'Ctrl+Shift+P',
+            discordMode: false
+        }, null, 2));
     }
-    if (!fs.existsSync(dbPath)) fs.writeFileSync(dbPath, new Uint8Array());
+
+    // Create empty database if missing
+    if (!fs.existsSync(dbPath)) {
+        fs.writeFileSync(dbPath, new Uint8Array());
+    }
 }
+
 
 function loadSettings() {
     try {
@@ -190,3 +203,4 @@ app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit());
 ipcMain.on('set-theme', (_e, theme) => saveSettings({ theme }));
 
 
+ipcMain.handle('get-app-version', () => app.getVersion());
