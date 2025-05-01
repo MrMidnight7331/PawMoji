@@ -81,6 +81,7 @@ function createMenu() {
         {
             label: 'Settings', submenu: [
                 {
+
                     label: 'Discord Escape',
                     type: 'checkbox',
                     checked: loadSettings().discordMode,
@@ -88,6 +89,15 @@ function createMenu() {
                         saveSettings({ discordMode: menuItem.checked });
                         // Optional: notify renderers that settings changed:
                         if (mainWin) mainWin.webContents.send('db-updated');
+                    }
+                },
+                {
+                    label: 'Reset Window Size',
+                    click: () => {
+                        if (mainWin) {
+                            mainWin.setSize(400, 800);
+                            mainWin.center();
+                        }
                     }
                 },
 

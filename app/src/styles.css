@@ -71,16 +71,22 @@
     --fg: var(--text);
 }
 
-
-
 /* Global styles */
 
 html, body {
     height: 100vh;
     margin: 0;
-    overflow: hidden;
+    overflow-y: hidden;      /* disable vertical on body, handled in containers */
+    overflow-x: hidden;      /* disable horizontal scrolling */
     transition: background 0.3s, color 0.3s;
 }
+
+/* Hide bottom scrollbar track */
+html::-webkit-scrollbar:horizontal,
+body::-webkit-scrollbar:horizontal {
+    display: none;
+}
+
 body {
     background: var(--bg);
     color: var(--fg);
@@ -199,7 +205,8 @@ body {
 }
 
 #kaomoji-container {
-    overflow-y: auto;
+    overflow-y: auto;       /* enable vertical scroll in container */
+    overflow-x: hidden;     /* prevent horizontal scroll */
     padding: 16px;
     background: var(--bg);
 }
