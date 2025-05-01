@@ -5,17 +5,16 @@ const Database = require('./database');
 
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
-    // Another instance is already running, quit this one
     app.quit();
 } else {
-    app.on('second-instance', (_e, _argv, _workingDir) => {
+    app.on('second-instance', () => {
         if (mainWin) {
             if (mainWin.isMinimized()) mainWin.restore();
-            mainWin.show();
             mainWin.focus();
         }
     });
 }
+
 
 
 let userDir, dbPath, settingsPath, mainWin, editorWin, tray;
@@ -64,10 +63,6 @@ function createMenu() {
         { role: 'windowMenu' }, { role: 'help' },
         {
             label: 'Settings', submenu: [
-                { label: 'Database Editor', click: () => openEditor() },
-                { type: 'separator' },
-                { label: 'Open Config', click: () => shell.openPath(settingsPath) },
-                { type: 'separator' },
                 {
                     label: 'Discord Escape',
                     type: 'checkbox',
@@ -77,7 +72,14 @@ function createMenu() {
                         // Optional: notify renderers that settings changed:
                         if (mainWin) mainWin.webContents.send('db-updated');
                     }
-                }
+                },
+
+                { type: 'separator' },
+
+                { label: 'Database Editor', click: () => openEditor() },
+                { label: 'Open Config', click: () => shell.openPath(settingsPath) }
+
+
             ]
         }
     ]));
@@ -97,27 +99,51 @@ async function createMain() {
     mainWin.on('close', e => { if (!app.isQuitting) { e.preventDefault(); mainWin.hide(); } });
 
     // Tray
-    const iconPath = path.join(__dirname, ''); // add a ~16×16 or 24×24 image here
+    const iconPath = path.join(__dirname, ''); // point to your 16×16 asset
     if (fs.existsSync(iconPath)) {
-        tray = new Tray(nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 }));
+        const image = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
+        tray = new Tray(image);
         tray.setToolTip('PawMoji');
+
+        // Left-click toggles minimize/restore
         tray.on('click', () => {
-            if (mainWin.isVisible()) mainWin.hide();
-            else mainWin.show();
+            if (mainWin.isMinimized() || !mainWin.isVisible()) {
+                mainWin.restore();
+                mainWin.focus();
+            } else {
+                mainWin.minimize();
+            }
         });
+
+        // Right-click menu also uses minimize/restore
         tray.setContextMenu(Menu.buildFromTemplate([
-            { label: 'Show/Hide PawMoji', click: () => mainWin.isVisible() ? mainWin.hide() : mainWin.show() },
+            {
+                label: mainWin.isMinimized() ? 'Restore PawMoji' : 'Minimize PawMoji',
+                click: () => {
+                    if (mainWin.isMinimized() || !mainWin.isVisible()) {
+                        mainWin.restore();
+                        mainWin.focus();
+                    } else {
+                        mainWin.minimize();
+                    }
+                }
+            },
+            { type: 'separator' },
             { label: 'Quit', click: () => { app.isQuitting = true; app.quit(); } }
         ]));
     }
+
 
     // Hotkey
     try {
         globalShortcut.unregisterAll();
         globalShortcut.register(hotkey, () => {
-            if (!mainWin) return;
-            // Toggle visibility of the *same* window
-            mainWin.isVisible() ? mainWin.hide() : mainWin.show();
+            if (mainWin.isMinimized() || !mainWin.isVisible()) {
+                mainWin.restore();
+                mainWin.focus();
+            } else {
+                mainWin.minimize();
+            }
         });
     } catch (err) {
         dialog.showErrorBox('Hotkey Error', `Failed to register: ${hotkey}\n${err.message}`);
