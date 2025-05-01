@@ -31,7 +31,7 @@ A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
 1. **Download the pre-compled binary for your operating system and execute.**
 
 
-#### 2. Development Setup:
+#### 2. Developer Setup:
 
 1. **Clone & Install**  
    ```bash
@@ -89,6 +89,19 @@ A charming kaomoji clipboard for effortlessly adding kawaii faces to your text.
   Template shipped in `src/styles.css` – copy to your data folder and tweak colors, fonts, or animations; PawMoji auto-loads it on launch.
 
 ---
+
+
+## Known Issues
+
+**Linux**
+
+1. Window Manager quirks
+
+    The global hotkey for show/hide can be unreliable on window managers.
+
+1. Startup lag
+
+    Noticeable delay on launch under window managers.
 
 ## 🎨 Theming
 
